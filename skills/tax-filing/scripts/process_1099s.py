@@ -199,7 +199,7 @@ def check_schedule_b_required(interest_total, dividend_total):
 
 def main():
     parser = argparse.ArgumentParser(description='Process 1099 forms for tax filing')
-    parser.add_argument('input_dir', help='Directory containing 1099 PDF files (e.g., 2025-source/)')
+    parser.add_argument('input_dir', help='Directory containing 1099 PDF files (e.g., 2025-source/inputs/)')
     parser.add_argument('--output', '-o', default='1099_summary.json', help='Output JSON file')
     parser.add_argument('--verbose', '-v', action='store_true', help='Verbose output')
     

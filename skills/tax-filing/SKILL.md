@@ -22,7 +22,8 @@ Organize all work into subfolders of the working directory:
 
 ```
 working_dir/
-  YYYY-source/         ← user's source documents (W-2, 1099s, prior return, CSVs)
+  YYYY-source/         ← source document folder
+    inputs/            ← user's source documents (W-2, 1099s, prior return, CSVs)
   work/                ← ALL intermediate files (extracted data, field maps, computations)
     tax_data.txt       ← extracted figures from source docs
     computations.txt   ← all tax math (federal, state, capital gains)
@@ -94,9 +95,9 @@ uv run python -c "import pdfplumber, pypdf, fitz; print('All dependencies instal
 uv sync
 
 # 2. Create working directories  
-mkdir -p 2025-source work forms output
+mkdir -p 2025-source/inputs work forms output
 
-# 3. Place your tax documents in 2025-source/
+# 3. Place your tax documents in 2025-source/inputs/
 # 4. Run: "Do my taxes using this skill"
 ```
 
@@ -108,7 +109,7 @@ These rules prevent context blowouts that cause compaction:
    ```bash
    uv run python -c "
    import pdfplumber
-   with pdfplumber.open('2025-source/document.pdf') as pdf:
+   with pdfplumber.open('2025-source/inputs/document.pdf') as pdf:
        for p in pdf.pages: print(p.extract_text())
    "
    ```
@@ -120,7 +121,7 @@ These rules prevent context blowouts that cause compaction:
 
 ### Step 1: Gather Source Documents
 
-Ask the user what documents they have. Read files from `YYYY-source/` (move them there if needed). Use pdfplumber for PDFs, Read tool for CSVs.
+Ask the user what documents they have. Read files from `YYYY-source/inputs/` (move them there if needed). Use pdfplumber for PDFs, Read tool for CSVs.
 
 **Investment Document Processing:**
 For 1099-B, 1099-DIV, and 1099-INT forms, extract the following data systematically:
@@ -163,6 +164,7 @@ Save all extracted figures to `work/tax_data.txt` immediately — one section pe
 - Any Illinois subtractions? (e.g., retirement income, U.S. government obligation interest, Social Security)
 - Any Illinois estimated tax payments made (IL-1040-ES)?
 - Any other credits or adjustments (e.g., Illinois Property Tax Credit, Education Expense Credit)
+- **If W-2 Box 12W (HSA) is present and exceeds the annual limit:** Was the excess contribution returned by the HSA custodian before April 15? If yes, obtain and review the custodian's distribution statement (letter, check stub, or account record) to confirm (a) the withdrawal actually completed, (b) the exact amount returned, and (c) the date. The amount returned will typically exceed the calculated excess because the custodian also returns earnings — note the earnings separately (they are income on the *following* year's return, not the current year).
 
 **Do NOT proceed to Step 3 until the user has answered.** "Same as last year" counts as confirmation.
 
@@ -173,6 +175,8 @@ Research from IRS.gov and tax.illinois.gov:
 - Illinois flat tax rate (currently 4.95% — verify current year at tax.illinois.gov)
 - Illinois personal exemption allowance for the filing status (e.g., $2,425 single — always look up; changes annually)
 - Illinois Schedule M additions/subtractions that apply to the taxpayer's situation
+
+**Standard deduction — verify from the actual Form 1040 PDF, not from memory or IRS Rev. Proc. alone.** Open the blank `f1040_blank.pdf` (once downloaded in Step 7) and read the field tooltip for the standard deduction line. The tooltip shows the exact dollar amount printed on the form for that year. Rev. Proc. values can differ from the final printed form; the form controls.
 
 Save to `work/computations.txt`.
 
@@ -279,12 +283,12 @@ Save all line values to `work/computations.txt`.
 
 **Automated 1099 Processing:**
 ```bash
-uv run python scripts/process_1099s.py 2025-source/ --output work/1099_summary.json --verbose
+uv run python scripts/process_1099s.py 2025-source/inputs/ --output work/1099_summary.json --verbose
 ```
 *Replace `2025` with the actual tax year being processed.*
 
 This script will:
-- Extract data from all 1099-INT, 1099-DIV, and 1099-B forms in `YYYY-source/`
+- Extract data from all 1099-INT, 1099-DIV, and 1099-B forms in `YYYY-source/inputs/`
 - Determine if Schedule B is required (interest or dividends >$1,500)
 - Categorize 1099-B transactions for Form 8949 when Box A/B/D/E appears clearly in extracted text; otherwise lists them under `uncategorized` for manual assignment
 - Calculate totals for federal and state withholding
@@ -396,6 +400,20 @@ Show a summary table, verification checklist, capital loss carryover (if any), t
 - Checkboxes: set both `/V` and `/AS` to `/1` or `/Off`
 - IRS fields need `[0]` suffix — use `add_suffix()`
 - IRS checkboxes match by `/T` directly; radio groups match by `/AP/N` key via `radio_values`
+
+### HSA Excess Contributions (W-2 Box 12W)
+
+If Box 12W exceeds the annual HSA limit (self-only or family — look up each year):
+
+| Situation | Income inclusion | 6% excise (Form 5329) | Earnings |
+|-----------|-----------------|----------------------|----------|
+| Excess NOT withdrawn by deadline | Include excess on Schedule 1 / Line 8 | Yes | N/A |
+| Excess withdrawn by April 15 (timely) | **No income inclusion** | **No** | Report on *next* year's return |
+
+- Timely withdrawal = returned by the due date of the return (April 15, or October 15 if extended).
+- The custodian returns the excess **plus earnings**. The excess itself drops out of income; the earnings go on the following year's return as Other Income.
+- Always obtain custodian documentation before applying the timely-withdrawal treatment. The check/statement amount will exceed your calculated excess by the earnings; record both figures separately.
+- Do NOT assume a timely withdrawal occurred based on the taxpayer's recollection alone — require documentary proof (custodian letter, check stub, or account transaction record).
 
 ### Form-Specific
 - **1040**: First few fields (`f1_01`-`f1_03`) are fiscal year headers, not name fields. SSN = 9 digits, no dashes. Digital assets = crypto only, not stocks.
