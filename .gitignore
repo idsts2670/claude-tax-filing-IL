@@ -5,6 +5,9 @@ __pycache__/
 .claude/
 .cursor/
 
+# Git backup
+.git_backup/
+
 # Temporary work directories
 work/
 output/

@@ -1,6 +1,0 @@
-0000000000000000000000000000000000000000 7b3657831c23b7059d2886bb449319f19971d7b8 idsts2670 <idsts2670@gmail.com> 1774211252 -0500	clone: from https://github.com/robbalian/claude-tax-filing.git
-0000000000000000000000000000000000000000 d1c5c46336fa099902107fe0dcd84b5422db4e2d Satoshi Ido <idsts2670@gmail.com> 1774216457 -0500	commit (initial): Initial commit: Illinois-focused Claude tax-filing skill
-d1c5c46336fa099902107fe0dcd84b5422db4e2d 0000000000000000000000000000000000000000 Satoshi Ido <idsts2670@gmail.com> 1774216552 -0500	Branch: renamed refs/heads/new-main to refs/heads/main
-0000000000000000000000000000000000000000 d1c5c46336fa099902107fe0dcd84b5422db4e2d Satoshi Ido <idsts2670@gmail.com> 1774216552 -0500	Branch: renamed refs/heads/new-main to refs/heads/main
-d1c5c46336fa099902107fe0dcd84b5422db4e2d 0273c73ce510974ca6aadca9a55f5a164b3a478f Satoshi Ido <idsts2670@gmail.com> 1774216910 -0500	commit: Update .gitignore to exclude work directories
-0273c73ce510974ca6aadca9a55f5a164b3a478f 112d41fca290fa89dc544a7a12a212c33864166c Satoshi Ido <idsts2670@gmail.com> 1774226153 -0500	commit: feat(tax-filing): 1099 automation, uv, IL Schedule M/IL-WIT docs
