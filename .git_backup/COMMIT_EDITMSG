@@ -1,0 +1,12 @@
+feat(tax-filing): 1099 automation, uv, IL Schedule M/IL-WIT docs
+
+- Expand SKILL.md with 1099-INT/DIV/B workflow, Schedule B/8949/D guidance,
+  Illinois Schedule M and IL-WIT, and context-budget rules
+- Add process_1099s.py to extract totals and optional Form 8949 box hints;
+  route unknown 1099-B rows to uncategorized for manual review
+- Add pyproject.toml with pdfplumber/pypdf/pymupdf pins, hatch wheel package
+  stub so uv sync succeeds, and committed uv.lock for reproducible installs
+- Pin Python 3.14 via .python-version; extend .gitignore for uv/venv paths
+- README: uv install prerequisites; discover_fields: pymupdf install hint
+
+Made-with: Cursor

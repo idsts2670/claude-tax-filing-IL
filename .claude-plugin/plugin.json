@@ -1,0 +1,8 @@
+{
+  "name": "tax-filing",
+  "description": "Prepare federal (IRS) and state (IL) income tax returns — extracts data from W-2s, 1099s, and brokerage CSVs, computes taxes, and fills official PDF forms.",
+  "version": "1.0.1",
+  "author": {
+    "name": "Satoshi Ido"
+  }
+}

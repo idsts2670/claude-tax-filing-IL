@@ -1,0 +1,15 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+	precomposeunicode = true
+[remote "origin"]
+	url = https://github.com/idsts2670/claude-tax-filing-IL.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[user]
+	name = Satoshi Ido
+	email = idsts2670@gmail.com
+[branch "main"]
+	vscode-merge-base = origin/main

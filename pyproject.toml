@@ -1,0 +1,40 @@
+[project]
+name = "claude-tax-filing"
+version = "1.0.1"
+description = "Illinois-focused Claude tax-filing skill with PDF form automation"
+authors = [
+    { name = "Satoshi Ido", email = "idsts2670@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "pdfplumber>=0.11.8",
+    "pypdf>=6.9.0",
+    "pymupdf>=1.27.2",     # Optional: for XFA form discovery (fitz)
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0.1",
+    "black>=26.3.0",
+    "ruff>=0.15.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["claude_tax_filing"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "ICN", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET", "SIM", "TID", "TCH", "ARG", "PTH", "ERA", "PD", "PGH", "PL", "TRY", "NPY", "RUF"]
+ignore = ["E501", "PLR0913", "PLR0912", "PLR0915"]
+
+[tool.black]
+line-length = 88
+target-version = ['py314']

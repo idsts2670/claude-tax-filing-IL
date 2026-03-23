@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+*.pdf
+.DS_Store
+.claude/
+.cursor/
+
+# Temporary work directories
+work/
+output/
+*-source/
+
+# Python environments
+.venv/
+venv/
+tax-env/
+.uv_cache/
+
+# uv lock file (include this in version control)
+# uv.lock
