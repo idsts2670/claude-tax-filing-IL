@@ -54,7 +54,7 @@ At the end, it gives you a clean summary of refunds, carryovers, and filled form
 
 ## What You Get
 
-- Filled PDF forms in `output/`
+- Filled PDF forms in `outputs/`
 - A summary of federal and state results
 - Any carryover values to save for next year
 - A checklist of what to sign, review, and file
