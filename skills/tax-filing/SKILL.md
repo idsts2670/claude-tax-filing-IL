@@ -45,7 +45,7 @@ working_dir/
   output/              ← final filled PDFs + fill script
     fill_YEAR.py       ← the fill script
     f1040_filled.pdf
-    f8949_filled.pdf
+    f8949_filled.pdf   ← one file per distinct box combination (e.g. f8949_filled_1.pdf, _2.pdf)
     f1040sd_filled.pdf
     scheduleb_filled.pdf
     il1040_filled.pdf
@@ -224,17 +224,11 @@ Apply this rule to **every** number entered on Form 1040, Schedule D, Form 8949 
 
 Save all line values to `work/computations.txt`.
 
-### Step 5: Compute Capital Gains (if applicable)
-
-1. Form 8949: individual transactions (Part I short-term, Part II long-term)
-2. Schedule D: totals, $3,000 loss limitation, carryover calculation
-3. Net gain/loss → 1040 Line 7
-
-### Step 6: Compute State Return (IL Form IL-1040)
+### Step 5: Compute State Return (IL Form IL-1040)
 
 Illinois taxes full-year residents on worldwide income at a **flat rate** — no brackets.
 
-**6A: Process Investment Income for Illinois**
+**5A: Process Investment Income for Illinois**
 
 **Key Illinois Rules:**
 - **Interest & Dividends:** Already included in Federal AGI, automatically flows to IL-1040 Line 1
@@ -242,7 +236,7 @@ Illinois taxes full-year residents on worldwide income at a **flat rate** — no
 - **Tax-Exempt Interest:** Federally tax-exempt interest (Form 1040 Line 2a) must be ADDED BACK on IL-1040 Line 2
 - **US Treasury Interest:** Must be SUBTRACTED on Schedule M (Illinois does not tax federal obligations)
 
-**6B: Illinois Withholding (Schedule IL-WIT)**
+**5B: Illinois Withholding (Schedule IL-WIT)**
 Only complete if any 1099 forms show Illinois withholding (Box 16/17). For each form with IL withholding:
 - Form type code (W=W-2, A=1099-B, B=1099-DIV, C=1099-INT, etc.)
 - Payer TIN
@@ -250,7 +244,7 @@ Only complete if any 1099 forms show Illinois withholding (Box 16/17). For each 
 - Illinois amount  
 - Illinois tax withheld
 
-**6C: Main IL-1040 Calculation**
+**5C: Main IL-1040 Calculation**
 
 1. **IL base income** (IL-1040 Line 11)
    - Start: Federal AGI (IL-1040 Line 1)
@@ -287,7 +281,7 @@ Only complete if any 1099 forms show Illinois withholding (Box 16/17). For each 
 
 Save all line values to `work/computations.txt`.
 
-### Step 6A: Process 1099 Forms (Investment Income)
+### Step 6: Process 1099 Forms (Investment Income)
 
 **Automated 1099 Processing:**
 ```bash
@@ -394,6 +388,7 @@ Show a summary table, verification checklist, capital loss carryover (if any), t
 - **Direct deposit** — recommend it for both refunds; ask for bank routing + account number
 - **Filing options**:
   - Federal: IRS Free File (free at irs.gov/freefile) or mail to IRS address on 1040 instructions
+    - **FFFF + Form 8949:** On Free File Fillable Forms, Schedule D has separate "Add" buttons for Part I (short-term) and Part II (long-term). Each click creates one Form 8949 instance covering only that holding period. Add one instance per box type (e.g., Box A, Box H, Box D = 3 instances). Lines 1b, 2, 7, 8b, 15, 16 on Schedule D are read-only and auto-calculate from your 8949 entries — you cannot type into them directly. Line 1a is the only manually-enterable short-term line and should be left blank if all transactions went through Form 8949.
   - Illinois: MyTax Illinois (free e-file at mytax.illinois.gov — no login required) or mail IL-1040 to:
     - Refund/zero balance: Illinois Department of Revenue, P.O. Box 19041, Springfield IL 62794-9041
     - Balance due: Illinois Department of Revenue, P.O. Box 19027, Springfield IL 62794-9027
@@ -440,6 +435,7 @@ When generating `fill_YYYY.py`, always reference `skills/tax-filing/scripts/fill
 ### Form-Specific
 - **1040**: First few fields (`f1_01`-`f1_03`) are fiscal year headers, not name fields. SSN = 9 digits, no dashes. Digital assets = crypto only, not stocks.
 - **8949**: Box A/B/C checkboxes are 3-way radio buttons. Totals at high field numbers (e.g. `f1_115`-`f1_119`), not after last data row. Schedule D lines 1b/8b (from 8949), not 1a/8a.
+- **8949 on Free File Fillable Forms (FFFF)**: FFFF splits Form 8949 by holding period — each "Add" button on Schedule D creates a short-term-only (Part I) or long-term-only (Part II) instance. Use the Part I "Add" for each short-term box (A, G, H, etc.) and the Part II "Add" for each long-term box (D, E, etc.). This means you need one FFFF instance per box type: e.g., Box A short-term stocks + Box H short-term crypto + Box D long-term stocks = 3 separate FFFF Form 8949 instances. The filled PDFs (f8949_filled_1.pdf, f8949_filled_2.pdf) are used as source references when re-entering data into FFFF — they are not uploaded directly.
 - **Schedule D**: Some fields have `_RO` suffix (read-only) — skip those.
 - **IL-1040**: Standard AcroForm — use `fill_pdf()`, NOT `fill_irs_pdf()` or `add_suffix()`. Field names discovered via `--compact` will match IL line numbers. IL-1040 PDF URLs change every year; always navigate the IDOR forms index page to find the current fillable PDF rather than hardcoding the URL. If Schedule M is needed (any additions/subtractions), download and fill it separately, then carry totals back to IL-1040 Lines 4 and 9.
 - **Downloads**: Prior-year IRS = `irs.gov/pub/irs-prior/`, current = `irs.gov/pub/irs-pdf/`
