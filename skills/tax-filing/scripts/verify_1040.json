@@ -1,0 +1,7 @@
+{
+  "_comment": "Structural verification for filled Form 1040 (Single filer with crypto). Radio button values are structural — not user-specific. Run: uv run python skills/tax-filing/scripts/verify_filled.py ../YYYY-source/outputs/f1040_filled.pdf skills/tax-filing/scripts/verify_1040.json",
+  "radio_buttons": {
+    "c1_8":  "/1",
+    "c1_10": "/1"
+  }
+}

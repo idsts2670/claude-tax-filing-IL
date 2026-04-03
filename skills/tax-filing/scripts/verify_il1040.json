@@ -1,0 +1,8 @@
+{
+  "_comment": "Structural verification for filled IL-1040 (Single filer, direct deposit refund). Run: uv run python skills/tax-filing/scripts/verify_filled.py ../YYYY-source/outputs/il1040_filled.pdf skills/tax-filing/scripts/verify_il1040.json",
+  "radio_buttons": {
+    "filing_status": "/single",
+    "refund":        "/direct deposit",
+    "account_type":  "/checking"
+  }
+}

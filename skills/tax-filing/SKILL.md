@@ -359,6 +359,13 @@ Write `output/fill_YEAR.py` using `scripts/fill_forms.py`:
 
 Output filled PDFs to `output/`.
 
+**After generating filled PDFs — mandatory verification:**
+```bash
+uv run python skills/tax-filing/scripts/verify_filled.py ../YYYY-source/outputs/f1040_filled.pdf skills/tax-filing/scripts/verify_1040.json
+uv run python skills/tax-filing/scripts/verify_filled.py ../YYYY-source/outputs/il1040_filled.pdf skills/tax-filing/scripts/verify_il1040.json
+```
+Fix any MISMATCH or MISSING before presenting results to the user.
+
 ### Step 9: Verify
 
 ```bash
@@ -414,6 +421,12 @@ If Box 12W exceeds the annual HSA limit (self-only or family — look up each ye
 - The custodian returns the excess **plus earnings**. The excess itself drops out of income; the earnings go on the following year's return as Other Income.
 - Always obtain custodian documentation before applying the timely-withdrawal treatment. The check/statement amount will exceed your calculated excess by the earnings; record both figures separately.
 - Do NOT assume a timely withdrawal occurred based on the taxpayer's recollection alone — require documentary proof (custodian letter, check stub, or account transaction record).
+
+### Fill Script Generation
+When generating `fill_YYYY.py`, always reference `skills/tax-filing/scripts/fill_template.py` for correct radio button AP/N values. Never guess these values. Key rules:
+- Form 1040 filing status (`c1_8`): `/1`=Single, `/2`=MFJ, `/3`=MFS, `/4`=HOH, `/5`=QSS
+- Form 1040 digital assets (`c1_10`): `/1`=Yes, `/2`=No
+- IL-1040 direct deposit: always include all four fields (`Routing number`, `Account number`, `refund` radio, `account_type` radio) when the taxpayer has a refund
 
 ### Form-Specific
 - **1040**: First few fields (`f1_01`-`f1_03`) are fiscal year headers, not name fields. SSN = 9 digits, no dashes. Digital assets = crypto only, not stocks.
