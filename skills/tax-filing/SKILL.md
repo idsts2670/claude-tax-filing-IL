@@ -180,6 +180,14 @@ Research from IRS.gov and tax.illinois.gov:
 
 Save to `work/computations.txt`.
 
+### Rounding Rule — Apply Everywhere
+
+**IRS and Illinois both require whole-dollar rounding on all return line values:**
+- Drop cents below $0.50 (e.g., $75,531.32 → $75,531)
+- Round up at $0.50 or higher (e.g., $26.50 → $27)
+
+Apply this rule to **every** number entered on Form 1040, Schedule D, Form 8949 totals, Schedule 3, and IL-1040 — including income, deductions, tax, payments, and refund/owed amounts. Source document figures (W-2, 1099) are extracted at full precision for intermediate math; round only the **final** value written to each form line.
+
 ### Step 4: Compute Federal Return
 
 **4A: Process Investment Income Forms**
@@ -427,6 +435,7 @@ When generating `fill_YYYY.py`, always reference `skills/tax-filing/scripts/fill
 - Form 1040 filing status (`c1_8`): `/1`=Single, `/2`=MFJ, `/3`=MFS, `/4`=HOH, `/5`=QSS
 - Form 1040 digital assets (`c1_10`): `/1`=Yes, `/2`=No
 - IL-1040 direct deposit: always include all four fields (`Routing number`, `Account number`, `refund` radio, `account_type` radio) when the taxpayer has a refund
+- **All string values passed to PDF fields must be whole-dollar amounts** (no cents). Apply the IRS rounding rule before writing any value: drop cents below $0.50, round up at $0.50 or higher. Example: `"75531"` not `"75531.32"`; `"27"` not `"26.50"`.
 
 ### Form-Specific
 - **1040**: First few fields (`f1_01`-`f1_03`) are fiscal year headers, not name fields. SSN = 9 digits, no dashes. Digital assets = crypto only, not stocks.
